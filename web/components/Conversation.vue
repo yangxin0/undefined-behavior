@@ -7,7 +7,7 @@ const currentModel = useCurrentModel()
 const openaiApiKey = useApiKey()
 const fetchingResponse = ref(false)
 const messageQueue = []
-const frugalMode = ref(true)
+const frugalMode = ref(false)
 let isProcessingQueue = false
 
 const props = defineProps({
@@ -267,13 +267,6 @@ onNuxtReady(() => {
             :label="$t('webSearch')"
         ></v-switch>
         <v-spacer></v-spacer>
-        <v-switch
-            v-model="frugalMode"
-            inline
-            hide-details
-            color="primary"
-            :label="$t('frugalMode')"
-        ></v-switch>
         <v-dialog
             transition="dialog-bottom-transition"
             width="auto"
