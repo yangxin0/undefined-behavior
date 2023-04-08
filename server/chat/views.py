@@ -157,17 +157,10 @@ def gen_title(request):
 def conversation(request):
     api_key = get_openai_api_key()
     if api_key is None:
-        return Response(
-            {
-                'error': 'The administrator has not set the API key'
-            },
-            status=status.HTTP_400_BAD_REQUEST
-        )
+        return Response({'error': 'Internal Error'}, status=status.HTTP_400_BAD_REQUEST)
+
     model_name = request.data.get('name')
-    if model_name is None:
-        model = get_current_model()
-    else:
-        model = get_current_model(model_name)
+    model = get_current_model(model_name)
     message = request.data.get('message')
     conversation_id = request.data.get('conversationId')
     max_tokens = request.data.get('max_tokens', model['max_response_tokens'])
@@ -176,7 +169,6 @@ def conversation(request):
     frequency_penalty = request.data.get('frequency_penalty', 0)
     presence_penalty = request.data.get('presence_penalty', 0)
     web_search_params = request.data.get('web_search')
-    openai_api_key = request.data.get('openaiApiKey')
     frugal_mode = request.data.get('frugalMode', False)
 
     if conversation_id:
@@ -213,7 +205,7 @@ def conversation(request):
             'userMessageId': message_obj.id,
         })
 
-        myOpenai = get_openai(openai_api_key)
+        myOpenai = get_openai()
 
         try:
             openai_response = myOpenai.ChatCompletion.create(
@@ -299,8 +291,11 @@ def build_messages(model, conversation_obj, web_search_params, frugal_mode = Fal
     return system_messages + messages
 
 
-def get_current_model(model="gpt-3.5-turbo"):
-    return MODELS[model]
+def get_current_model(model_name="gpt-3.5-turbo"):
+    if model in MODELS:
+        return MODELS[model_name]
+    else:
+        return MODELS["gpt-3.5-turbo"]
 
 
 def get_openai_api_key():
