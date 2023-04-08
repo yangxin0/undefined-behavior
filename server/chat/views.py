@@ -130,7 +130,7 @@ def gen_title(request):
     myOpenai = get_openai()
     try:
         openai_response = myOpenai.ChatCompletion.create(
-            model='gpt-3.5-turbo-0301',
+            model='gpt-3.5-turbo',
             messages=messages,
             max_tokens=256,
             temperature=0.5,
@@ -344,8 +344,9 @@ def num_tokens_from_messages(messages, model="gpt-3.5-turbo-0301"):
 
 def get_openai(openai_api_key = None):
     if openai_api_key is None:
-        openai_api_key = get_openai_api_key()
-    openai.api_key = openai_api_key
+        openai.api_key = get_openai_api_key()
+    else:
+        openai.api_key = openai_api_key
     proxy = os.getenv('OPENAI_API_PROXY')
     if proxy:
         openai.api_base = proxy
