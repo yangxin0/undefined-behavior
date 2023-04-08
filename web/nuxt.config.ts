@@ -12,7 +12,7 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
             appName: appName,
-            typewriter: false,
+            typewriter: true,
             typewriterDelay: 50,
             customApiKey: false
         }

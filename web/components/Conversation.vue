@@ -25,23 +25,23 @@ const processMessageQueue = () => {
     props.conversation.messages.push({id: null, is_bot: true, message: ''})
   }
   isProcessingQueue = true
-  const nextMessage = messageQueue.shift()
-  if (runtimeConfig.public.typewriter) {
-    let wordIndex = 0;
-    const intervalId = setInterval(() => {
-      props.conversation.messages[props.conversation.messages.length - 1].message += nextMessage[wordIndex]
-      wordIndex++
-      if (wordIndex === nextMessage.length) {
-        clearInterval(intervalId)
+    const nextMessage = messageQueue.shift()
+    if (runtimeConfig.public.typewriter) {
+      let wordIndex = 0;
+      const intervalId = setInterval(() => {
+          props.conversation.messages[props.conversation.messages.length - 1].message += nextMessage[wordIndex]
+          wordIndex++
+          if (wordIndex === nextMessage.length) {
+          clearInterval(intervalId)
+          isProcessingQueue = false
+          processMessageQueue()
+          }
+          }, runtimeConfig.public.typewriterDelay)
+    } else {
+      props.conversation.messages[props.conversation.messages.length - 1].message += nextMessage
         isProcessingQueue = false
         processMessageQueue()
-      }
-    }, runtimeConfig.public.typewriterDelay)
-  } else {
-    props.conversation.messages[props.conversation.messages.length - 1].message += nextMessage
-    isProcessingQueue = false
-    processMessageQueue()
-  }
+    }
 }
 
 let ctrl
