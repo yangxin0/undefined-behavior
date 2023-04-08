@@ -292,7 +292,7 @@ def build_messages(model, conversation_obj, web_search_params, frugal_mode = Fal
 
 
 def get_current_model(model_name="gpt-3.5-turbo"):
-    if model in MODELS:
+    if model_name in MODELS:
         return MODELS[model_name]
     else:
         return MODELS["gpt-3.5-turbo"]
@@ -300,7 +300,7 @@ def get_current_model(model_name="gpt-3.5-turbo"):
 
 def get_openai_api_key():
     row = Setting.objects.filter(name='openai_api_key').first()
-    if row:
+    if row and row.value:
         return row.value
     return os.getenv("OPENAI_API_KEY")
 
