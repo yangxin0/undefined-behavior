@@ -56,7 +56,7 @@ const clickSendBtn = () => {
   send()
 }
 
-const enterOnly = (event) => {
+const sendPrompt= (event) => {
   event.preventDefault();
   if (!isMobile()) {
     send()
@@ -84,7 +84,7 @@ defineExpose({
         :hide-details="true"
         clearable
         variant="outlined"
-        @keydown.enter.exact="enterOnly"
+        @keydown.enter.shift.exact="sendPrompt"
     ></v-textarea>
     <v-btn
         :disabled="loading"
