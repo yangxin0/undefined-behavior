@@ -307,7 +307,7 @@ def get_openai_api_key():
     row = Setting.objects.filter(name='openai_api_key').first()
     if row:
         return row.value
-    return None
+    return os.getenv("OPENAI_API_KEY")
 
 
 def num_tokens_from_messages(messages, model="gpt-3.5-turbo-0301"):
