@@ -15,6 +15,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('amount', models.FloatField(default=0)),
             ],
         ),
     ]

@@ -152,6 +152,13 @@ def gen_title(request):
         'title': title
     })
 
+@api_view(['POST'])
+# @authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def recharge(request):
+    amount = request.data.get('amount')
+    recharge_obj = Conversation(user=request.user)
+    recharge_obj.save()
 
 @api_view(['POST'])
 # @authentication_classes([JWTAuthentication])
