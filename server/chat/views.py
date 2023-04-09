@@ -179,6 +179,7 @@ def conversation(request):
     else:
         # create a new conversation
         conversation_obj = Conversation(user=request.user)
+        conversation_obj.model_name = model_name
         conversation_obj.save()
     # insert a new message
     message_obj = Message(
@@ -251,6 +252,8 @@ def conversation(request):
             total_token_num=total_token_num
         )
         ai_message_obj.save()
+        conversation_total_token_num = total_token_num + conversation_obj.total_token_num
+        Conversation.objects.filter(id=conversation_obj.id).update(**{'total_token_num': conversation_total_token_num})
         yield sse_pack('done', {
             'messageId': ai_message_obj.id,
             'conversationId': conversation_obj.id
