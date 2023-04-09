@@ -183,3 +183,34 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', True) == 'True'
 EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', False) == 'True'
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_FROM', 'webmaster@localhost')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '{levelname} [{asctime}] [{name}:{funcName}():{lineno}] {message}',
+            'style': '{'
+        }
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': '/tmp/chatgpt_server.log',
+            'formatter': 'standard',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard',
+        },
+    },
+    'loggers': {
+        'chat': {
+            'handlers': ['file', 'console'],
+            'level': os.getenv('CHATGPT_LOG_LEVEL', 'INFO'),
+            'propagate': True,
+        },
+    },
+}
