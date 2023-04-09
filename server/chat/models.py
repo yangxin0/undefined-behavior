@@ -13,7 +13,7 @@ class Message(models.Model):
     message = models.TextField()
     is_bot = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-
+    total_token_num = models.IntegerField(default=0)
 
 class Prompt(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -226,6 +226,7 @@ def conversation(request):
             return
         collected_events = []
         completion_text = ''
+        total_token_num = 0
         # iterate through the stream of events
         for event in openai_response:
             collected_events.append(event)  # save the event response
@@ -237,13 +238,15 @@ def conversation(request):
                 print(event)
             if 'content' in event['choices'][0]['delta']:
                 event_text = event['choices'][0]['delta']['content']
+                total_token_num += num_tokens_from_string(event_text, "cl100k_base")
                 completion_text += event_text  # append the text
                 yield sse_pack('message', {'content': event_text})
 
         ai_message_obj = Message(
             conversation_id=conversation_obj.id,
             message=completion_text,
-            is_bot=True
+            is_bot=True,
+            total_token_num=total_token_num
         )
         ai_message_obj.save()
         yield sse_pack('done', {
@@ -253,6 +256,10 @@ def conversation(request):
 
     return StreamingHttpResponse(stream_content(), content_type='text/event-stream')
 
+def num_tokens_from_string(string: str, encoding_name: str) -> int:
+    encoding = tiktoken.get_encoding(encoding_name)
+    num_tokens = len(encoding.encode(string))
+    return num_tokens
 
 def build_messages(model, conversation_obj, web_search_params, frugal_mode = False):
 
