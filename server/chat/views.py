@@ -14,7 +14,9 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from .serializers import ConversationSerializer, MessageSerializer, PromptSerializer, SettingSerializer
 from utils.search_prompt import compile_prompt
 from utils.duckduckgo_search import web_search, SearchRequest
+import logging
 
+logger = logging.getLogger(__name__)
 
 class SettingViewSet(viewsets.ModelViewSet):
     serializer_class = SettingSerializer
@@ -191,7 +193,7 @@ def conversation(request):
         if settings.DEBUG:
             print('prompt:', messages)
     except Exception as e:
-        print(e)
+        logger.error(e)
         return Response(
             {
                 'error': e
@@ -306,11 +308,15 @@ def get_current_model(model_name="gpt-3.5-turbo"):
 
 
 def get_openai_api_key():
+    # load key from database
     row = Setting.objects.filter(name='openai_api_key').first()
     if row and row.value:
         return row.value
-    return os.getenv("OPENAI_API_KEY")
-
+    # load key from env
+    key = os.getenv("OPENAI_API_KEY")
+    if key is None:
+        raise "No OpenAI key installled"
+    return key
 
 def num_tokens_from_messages(messages, model="gpt-3.5-turbo-0301"):
     """Returns the number of tokens used by a list of messages."""
