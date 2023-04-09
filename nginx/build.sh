@@ -6,6 +6,5 @@ if [ "$#" -ne 1 ]; then
 fi
 
 DIR="$(dirname "${BASH_SOURCE[0]}")"
-echo $DIR
 docker build -t nginx-server:${1} -f ${DIR}/Dockerfile ${DIR}/../server
 
