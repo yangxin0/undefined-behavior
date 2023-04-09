@@ -22,5 +22,5 @@ import uuid
 
 password = str(uuid.uuid1()).replace('-', '')
 User.objects.create_user(username="admin", password=password, 
-                    is_superuser=True, is_staff=True, is_active=True)
-print("Your admin account: admin/%s" % (password))
+                         is_superuser=True, is_staff=True, is_active=True)
+print("Your admin account: admin / %s" % (password))
