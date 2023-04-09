@@ -212,5 +212,14 @@ LOGGING = {
             'level': os.getenv('CHATGPT_LOG_LEVEL', 'INFO'),
             'propagate': True,
         },
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
     },
 }
+
+import logging
+logging.captureWarnings(True)
+
