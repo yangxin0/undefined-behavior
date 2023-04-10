@@ -52,4 +52,9 @@ nginx作为整个项目的入口所有的流量都经过nginx转发到后面的�
 1. 提供chatgpt-server的静态文件服务，由于django的gunicorn不支持静态文件所以需要nginx的支持。
 2. 作为整个项目的入口（80端口），转发请求到后面的业务服务器
 
-由于nginx要serve后面chatgpt-server的静态文件，所以在构建nginx镜像的时候要从chatgpt-server获取静态文件。nginx-server镜像在运行的时候需要提供BACKEND_URL环境变量，该环境变量是下一级服务的IP和端口。（如果是docker-compose部署则可能是一个DNS name）
+由于nginx要serve后面chatgpt-server的静态文件，所以在构建nginx镜像的时候要从chatgpt-server获取静态文件。nginx-server镜像在运行的时候需要提供BACKEND_URL环境变量，该环境变量是下一级服务的IP和端口。（如果是docker-compose部署则可能是一个DNS name）。如果要构建nginx-server的镜像参考下面：
+
+```
+./nginx/build.sh 版本信息（例如latest或者v1.0等）
+```
+
