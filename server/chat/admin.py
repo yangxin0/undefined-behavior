@@ -32,4 +32,14 @@ class BalanceAdmin(admin.ModelAdmin):
 
 @admin.register(MessageCost)
 class MessageCostAdmin(admin.ModelAdmin):
-    list_display = ('user', 'message', 'usd_amount')
+    list_display = ('user', 'get_message_id', 'get_message_token', 'usd_amount')
+
+    def get_message_token(self, obj):
+        return obj.message.total_token
+
+    get_message_token.short_description = 'Total Token'
+
+    def get_message_id(self, obj):
+        return obj.message.id
+
+    get_message_id.short_description = 'Msg ID'
