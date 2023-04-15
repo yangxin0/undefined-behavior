@@ -20,7 +20,10 @@ Setting.objects.create(name='open_api_key_setting', value='False')
 from django.contrib.auth.models import User
 import uuid
 
-password = str(uuid.uuid1()).replace('-', '')
+if os.getenv('DEBUG', 'False') == 'True':
+    password = 'admin'
+else:
+    password = str(uuid.uuid1()).replace('-', '')
 User.objects.create_user(username="admin", password=password, 
                          is_superuser=True, is_staff=True, is_active=True)
 print("Your admin account: admin / %s" % (password))
