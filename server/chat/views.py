@@ -6,7 +6,7 @@ import tiktoken
 from .models import Conversation, Message, Setting, Prompt, Balance, MessageCost
 from django.conf import settings
 from django.core import serializers
-from django.http import StreamingHttpResponse
+from django.http import StreamingHttpResponse, HttpResponse
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -220,13 +220,9 @@ def conversation(request):
 
     balance_obj = Balance.objects.get(user_id=request.user.id)
     if balance_obj.usd_amount < 0:
-        logger.error("用户余额不足")
-        return Response(
-            {
-                'error': "用户余额不足"
-            },
-            status=status.HTTP_400_BAD_REQUEST
-        )                
+        def stream():
+            yield sse_pack('message', {'content': '用户余额不足, 请联系管理员充值, 管理员微信号为: ManFung0122'})
+        return StreamingHttpResponse(stream(), content_type='text/event-stream')
 
     def stream_content():
         yield sse_pack('userMessageId', {
