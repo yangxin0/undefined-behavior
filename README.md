@@ -64,6 +64,7 @@ nginx作为整个项目的入口所有的流量都经过nginx转发到后面的�
 
 1. 开发环境可以使用`yarn dev`进行动态的打包和调试，默认端口是3000。
 2. 生产环境使用`yarn build`就可以构建部署使用的文件，该文件默认会写入到`.output`目录
+3. 构建镜像`./scripts/build.sh TAG(docker TAG)`
 
  ### chatgpt-server部署
 
