@@ -214,7 +214,7 @@ LOGGING = {
         },
         'django': {
             'handlers': ['file', 'console'],
-            'level': 'ERROR',
+            'level': os.getenv('CHATGPT_LOG_LEVEL', 'INFO'),
             'propagate': True,
         },
     },
