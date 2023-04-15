@@ -13,13 +13,13 @@ RUN yarn build
 
 FROM node:18-alpine3.16
 
-ENV NITRO_PORT=80
+ENV NITRO_PORT=3000
 
 WORKDIR /app
 
 COPY --from=builder /app/.output/ .
 
-EXPOSE 80
+EXPOSE 3000
 
 # TODO: You can use NITRO_PRESET=node_cluster in order to leverage multi-process performance using Node.js cluster module. https://nuxt.com/docs/getting-started/deployment
 
