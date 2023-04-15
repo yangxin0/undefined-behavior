@@ -155,10 +155,8 @@ def gen_title(request):
 @api_view(['POST'])
 # @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
-def recharge(request):
-    amount = request.data.get('amount')
-    recharge_obj = Conversation(user=request.user)
-    recharge_obj.save()
+def deposite(request):
+    pass
 
 @api_view(['POST'])
 # @authentication_classes([JWTAuthentication])
@@ -236,7 +234,7 @@ def conversation(request):
             return
         collected_events = []
         completion_text = ''
-        total_token_num = 0
+        total_token = 0
         # iterate through the stream of events
         for event in openai_response:
             collected_events.append(event)  # save the event response
@@ -248,7 +246,7 @@ def conversation(request):
                 print(event)
             if 'content' in event['choices'][0]['delta']:
                 event_text = event['choices'][0]['delta']['content']
-                total_token_num += num_tokens_from_string(event_text, "cl100k_base")
+                total_token += num_tokens_from_string(event_text, "cl100k_base")
                 completion_text += event_text  # append the text
                 yield sse_pack('message', {'content': event_text})
 
@@ -256,11 +254,11 @@ def conversation(request):
             conversation_id=conversation_obj.id,
             message=completion_text,
             is_bot=True,
-            total_token_num=total_token_num
+            total_token=total_token
         )
         ai_message_obj.save()
-        conversation_total_token_num = total_token_num + conversation_obj.total_token_num
-        Conversation.objects.filter(id=conversation_obj.id).update(**{'total_token_num': conversation_total_token_num})
+        conversation_total_token = total_token + conversation_obj.total_token
+        Conversation.objects.filter(id=conversation_obj.id).update(**{'total_token': conversation_total_token})
         yield sse_pack('done', {
             'messageId': ai_message_obj.id,
             'conversationId': conversation_obj.id
