@@ -4,7 +4,7 @@ from enum import Enum
 
 class Balance(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    usd_amount = models.FloatField(default=0)
+    usd_amount = models.FloatField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
 
 class Deposit(models.Model):
@@ -28,8 +28,8 @@ class Deposit(models.Model):
 
 class Conversation(models.Model):
     class BillingRules(Enum):
-        TENOPENAI = 0.003 
-        OPENAI = 0.0003
+        TENOPENAI = 0.003 / 1000
+        OPENAI = 0.0003 / 1000
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     topic = models.CharField(max_length=255)

@@ -3,7 +3,7 @@ import json
 import openai
 import datetime
 import tiktoken
-from .models import Conversation, Message, Setting, Prompt, Balance
+from .models import Conversation, Message, Setting, Prompt, Balance, MessageCost
 from django.conf import settings
 from django.core import serializers
 from django.http import StreamingHttpResponse
