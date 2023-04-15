@@ -3,8 +3,9 @@ import json
 import openai
 import datetime
 import tiktoken
-from .models import Conversation, Message, Setting, Prompt
+from .models import Conversation, Message, Setting, Prompt, Balance
 from django.conf import settings
+from django.core import serializers
 from django.http import StreamingHttpResponse
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -152,6 +153,15 @@ def gen_title(request):
         'title': title
     })
 
+
+@api_view(['GET'])
+# @authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def balance(request):
+    balance_object = Balance.objects.filter(user=request.user)
+    data = serializers.serialize('json', balance=balance_object)
+    return HttpResponse(data, content_type='application/json')
+
 @api_view(['POST'])
 # @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
@@ -208,13 +218,22 @@ def conversation(request):
         )
     # print(prompt)
 
+    balance_obj = Balance.objects.get(user_id=request.user.id)
+    if balance_obj.usd_amount < 0:
+        logger.error("用户余额不足")
+        return Response(
+            {
+                'error': "用户余额不足"
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )                
+
     def stream_content():
         yield sse_pack('userMessageId', {
             'userMessageId': message_obj.id,
         })
 
         myOpenai = get_openai()
-
         try:
             openai_response = myOpenai.ChatCompletion.create(
                 model=model['name'],
@@ -257,6 +276,18 @@ def conversation(request):
             total_token=total_token
         )
         ai_message_obj.save()
+
+        amount = total_token * conversation_obj.billing_rule
+        message_cost_obj = MessageCost(
+             message_id=ai_message_obj.id,
+             user_id=request.user.id,
+             usd_amount=amount
+        )
+        message_cost_obj.save() 
+
+        balance_obj.usd_amount -= amount
+        balance_obj.save()
+
         conversation_total_token = total_token + conversation_obj.total_token
         Conversation.objects.filter(id=conversation_obj.id).update(**{'total_token': conversation_total_token})
         yield sse_pack('done', {

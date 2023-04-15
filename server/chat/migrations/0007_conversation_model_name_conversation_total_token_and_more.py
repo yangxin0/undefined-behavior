@@ -25,14 +25,14 @@ class Migration(migrations.Migration):
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='message',
-            name='total_token',
-            field=models.IntegerField(default=0),
+            model_name='conversation',
+            name='billing_rule',
+            field=models.FloatField(default=0.03),
         ),
         migrations.AddField(
             model_name='message',
-            name='usd_cost',
-            field=models.FloatField(default=0),
+            name='total_token',
+            field=models.IntegerField(default=0),
         ),
         migrations.CreateModel(
             name='MessageCost',

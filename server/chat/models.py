@@ -16,6 +16,10 @@ class DespoitCurrency(Enum):
     RMB = "RMB"
     EUR = "EUR"
 
+class BillingRules(Enum):
+    TENOPENAI = 0.003 
+    OPENAI = 0.0003
+
 class Deposit(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.FloatField(default=0) # currency value
@@ -32,13 +36,14 @@ class Conversation(models.Model):
     model_name = models.CharField(max_length=255, default='gpt-3.5-turbo')
     total_token = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+    billing_rule = models.FloatField(default=0.003,
+                                     choices=[(t, t.value) for t in BillingRules])
 
 class Message(models.Model):
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
     message = models.TextField()
     is_bot = models.BooleanField(default=False) # user prompt or GPT answer(is_bot=1)
     total_token = models.IntegerField(default=0)
-    usd_cost = models.FloatField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
 class MessageCost(models.Model):
