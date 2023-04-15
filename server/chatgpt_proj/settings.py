@@ -218,6 +218,10 @@ LOGGING = {
             'level': os.getenv('CHATGPT_LOG_LEVEL', 'INFO'),
             'propagate': True,
         },
+        'django.utils.autoreload': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+        },
     },
 }
 
