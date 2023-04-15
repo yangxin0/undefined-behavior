@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import Deposit, DespoitSource, DespoitCurrency, Balance
+from .models import Deposit, Balance
 from django.contrib.auth.models import User
 
 
@@ -12,6 +12,6 @@ def handle_user_post_save(sender, instance, created, **kwargs):
     Deposit.objects.create(user=instance,
                            amount=1,
                            exchange=1,
-                           source=DespoitSource.TRIAL,
-                           currency=DespoitCurrency.USD)
+                           source=Deposit.Source.TRIAL.name,
+                           currency=Deposit.Currency.USD.name)
     Balance.objects.create(user=instance, usd_amount=1)

@@ -7,37 +7,37 @@ class Balance(models.Model):
     usd_amount = models.FloatField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
-class DespoitSource(Enum):
-    WECHAT = "Wechat"
-    TRIAL = "Trial"
-
-class DespoitCurrency(Enum):
-    USD = "USD"
-    RMB = "RMB"
-    EUR = "EUR"
-
-class BillingRules(Enum):
-    TENOPENAI = 0.003 
-    OPENAI = 0.0003
-
 class Deposit(models.Model):
+    class Source(Enum):
+        WECHAT = "Wechat"
+        TRIAL = "Trial"
+
+    class Currency(Enum):
+        USD = "USD"
+        RMB = "RMB"
+        EUR = "EUR"
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.FloatField(default=0) # currency value
     exchange = models.FloatField(default=1) # default exhange rate for usd
-    source = models.CharField(max_length=255, default="Trial",
-                              choices=[(t, t.value) for t in DespoitSource])
-    currency = models.CharField(max_length=255, default="USD",
-                                choices=[(t, t.value) for t in DespoitCurrency])
+    source = models.CharField(max_length=255, default=Source.TRIAL.name,
+                              choices=[(t.name, t.value) for t in Source])
+    currency = models.CharField(max_length=255, default=Currency.USD.name,
+                                choices=[(t.name, t.value) for t in Currency])
     created_at = models.DateTimeField(auto_now_add=True)
 
 class Conversation(models.Model):
+    class BillingRules(Enum):
+        TENOPENAI = 0.003 
+        OPENAI = 0.0003
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     topic = models.CharField(max_length=255)
     model_name = models.CharField(max_length=255, default='gpt-3.5-turbo')
     total_token = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
-    billing_rule = models.FloatField(default=0.003,
-                                     choices=[(t, t.value) for t in BillingRules])
+    billing_rule = models.FloatField(default=BillingRules.TENOPENAI.value,
+                                     choices=[(t.value, t.name) for t in BillingRules])
 
 class Message(models.Model):
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
