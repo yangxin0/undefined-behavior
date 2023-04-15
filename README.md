@@ -58,3 +58,21 @@ nginx作为整个项目的入口所有的流量都经过nginx转发到后面的�
 ./nginx/build.sh 版本信息（例如latest或者v1.0等）
 ```
 
+### web-server环境部署
+
+首先需要配置npm安装`node 18.x`和yarn构建工具，然后使用`yarn install`就可以安装开发Web的所有依赖和工具。
+
+1. 开发环境可以使用`yarn dev`进行动态的打包和调试，默认端口是3000。
+2. 生产环境使用`yarn build`就可以构建部署使用的文件，该文件默认会写入到`.output`目录
+
+ ### chatgpt-server部署
+
+基于django的RESTful模块实现所有的业务逻辑：openai查询、用户注册、计费系统等，该模块当前仅支持openai的GPT模型未来会整合更多的模型如百度文心一言。本项目原始作者设计的目标是text-to-text的模式所以较难的迁移到其他模式如：text-to-image等，主要原因是text-to-image通常需要耗费几分钟时间，按照目前的UX交互形式将会非常难用。所有后续主要新增更多的text-to-text模型为主，其他模态的模型不作考虑。以下是程序构建与运行的步骤，你可以根据程序的维护阶段选择性的执行：
+
+1. 构建程序镜像 `./scripts/build.sh TAG(docker的TAG)`
+2. 试用./scripts/console.sh进入容器在该容器中你可以：初始化数据库、数据库迁移与维护等
+   - 删除数据库：根据settings.py的配置进入数据库环境删除数据（高危操作）
+   - 初始化/迁移数据库： python manage.py migrate
+   - 初始化配置和账户等信息：./scripts/seeds.py
+3. 该容器包含一个可选的环境配置`SERVER_WORKERS`表示进程数量（默认为4），通常不需要更改
+
