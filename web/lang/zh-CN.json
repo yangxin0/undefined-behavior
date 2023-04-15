@@ -14,7 +14,7 @@
   "addPrompt": "Add prompt",
   "titlePrompt": "Title",
   "addNewPrompt": "Add a new prompt",
-  "pressEnterToSendYourMessageOrShiftEnterToAddANewLine": "按Shift+Enter发送您的信息，或按Enter键添加新行",
+  "pressEnterToSendYourMessageOrShiftEnterToAddANewLine": "按Enter发送您的信息，或按Shift+Enter键添加新行",
   "lightMode": "明亮模式",
   "darkMode": "暗色模式",
   "followSystem": "跟随系统",

@@ -58,8 +58,9 @@ const clickSendBtn = () => {
 
 const sendPrompt= (event) => {
   event.preventDefault();
-  if (!isMobile()) {
-    send()
+  // isComposing表示输入法下的Enter
+  if (!event.isComposing) {
+      send()
   }
 }
 
@@ -84,7 +85,7 @@ defineExpose({
         :hide-details="true"
         clearable
         variant="outlined"
-        @keydown.enter.shift.exact="sendPrompt"
+        @keydown.enter="sendPrompt"
     ></v-textarea>
     <v-btn
         :disabled="loading"
