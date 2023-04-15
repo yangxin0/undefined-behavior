@@ -11,7 +11,7 @@ class ConversationAdmin(admin.ModelAdmin):
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'get_conversation_topic', 'message', 'is_bot', 'created_at')
+    list_display = ('id', 'get_conversation_topic', 'message', 'total_token', 'is_bot', 'created_at')
 
     def get_conversation_topic(self, obj):
         return obj.conversation.topic
