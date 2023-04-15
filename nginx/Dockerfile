@@ -18,6 +18,6 @@ FROM nginx:1.22-alpine as nginx-server
 
 WORKDIR /app
 
-COPY --from=chatgpt-server /app/static /app/static
+COPY --from=chatgpt-server static static
 
 COPY nginx.conf /etc/nginx/templates/default.conf.template
