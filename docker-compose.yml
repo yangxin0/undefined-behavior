@@ -42,12 +42,13 @@ services:
     platform: linux/x86_64
     # platform: linux/arm64/v8
     image: nginx-server:v0.1
-    environment:
-      - BACKEND_URL=http://web-server:3000
+    # environment:
+      # - BACKEND_URL=http://web-server:3000
     ports:
       - '${NGINX_PORT:-80}:80'
     depends_on:
       - web-server
+      - chatgpt-server
     networks:
       - chatgpt_network
     restart: always
