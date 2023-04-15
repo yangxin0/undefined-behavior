@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from .models import Conversation, Message, Setting
+from .models import Deposit, Balance, MessageCost
 
 
 @admin.register(Conversation)
@@ -17,7 +18,18 @@ class MessageAdmin(admin.ModelAdmin):
 
     get_conversation_topic.short_description = 'Conversation Topic'
 
-
 @admin.register(Setting)
 class SettingAdmin(admin.ModelAdmin):
     list_display = ('name', 'value')
+
+@admin.register(Deposit)
+class DepositAdmin(admin.ModelAdmin):
+    list_display = ('user', 'amount', 'currency', 'exchange', 'source')
+
+@admin.register(Balance)
+class BalanceAdmin(admin.ModelAdmin):
+    list_display = ('user', 'usd_amount')
+
+@admin.register(MessageCost)
+class MessageCostAdmin(admin.ModelAdmin):
+    list_display = ('user', 'message', 'usd_amount')
