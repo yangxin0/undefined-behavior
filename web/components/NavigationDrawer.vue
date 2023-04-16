@@ -318,14 +318,6 @@ const drawer = useDrawer()
           </v-menu>
 
           <SettingsLanguages/>
-
-          <v-list-item
-              rounded="xl"
-              prepend-icon="help_outline"
-              :title="$t('feedback')"
-              @click="feedback"
-          ></v-list-item>
-
         </v-list>
       </div>
     </template>
